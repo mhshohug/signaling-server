@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: webrtc-signaling-server
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: STUN_SERVERS
+        value: "stun:stun.l.google.com:19302,stun:stun1.l.google.com:19302,stun:stun2.l.google.com:19302"
+      - key: TURN_SERVERS
+        value: "[]"
+      - key: JWT_SECRET
+        sync: false
