@@ -65,23 +65,28 @@ function initSocket(io) {
     // FCM TOKEN MANAGEMENT
     // ----------------------------------------------------
 
-    socket.on('register_fcm_token', async (data) => {
-      const { token, deviceName, platform } = data || {};
-      if (token) {
-        await firebaseService.registerFcmToken(userId, token, deviceName, platform);
-        socket.emit('fcm_token_registered', { success: true });
-      } else {
-        socket.emit('fcm_token_registered', { success: false, error: 'Token is required' });
-      }
-    });
+socket.on('register_fcm_token', async (data) => {
+  logger.info(`register_fcm_token received from ${userId}: ${JSON.stringify(data)}`);
 
-    socket.on('unregister_fcm_token', async (data) => {
-      const { token } = data || {};
-      if (token) {
-        await firebaseService.removeFcmToken(userId, token);
-        socket.emit('fcm_token_unregistered', { success: true });
-      }
+  const { token, deviceName, platform } = data || {};
+
+  if (token) {
+    logger.info(`Registering FCM token for ${userId}`);
+
+    await firebaseService.registerFcmToken(userId, token, deviceName, platform);
+
+    logger.info(`registerFcmToken() finished for ${userId}`);
+
+    socket.emit('fcm_token_registered', { success: true });
+  } else {
+    logger.warn(`register_fcm_token received without token from ${userId}`);
+
+    socket.emit('fcm_token_registered', {
+      success: false,
+      error: 'Token is required'
     });
+  }
+});
 
     // ----------------------------------------------------
     // CHAT SCREEN TRACKING (ACTIVE CONVERSATION)
