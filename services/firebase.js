@@ -58,7 +58,7 @@ async function registerFcmToken(userId, token, deviceName = 'Unknown Device', pl
         },
         { onConflict: 'user_id,fcm_token' }
       );
-
+logger.info(`Supabase response: ${JSON.stringify(error)}`);
     if (error) {
       logger.warn(`Upsert device_tokens failed: ${error.message}. Attempting delete-insert fallback.`);
       await supabase
