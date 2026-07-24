@@ -45,6 +45,7 @@ function initFirebase() {
 async function registerFcmToken(userId, token, deviceName = 'Unknown Device', platform = 'android') {
   if (!userId || !token) return;
   try {
+    logger.info(`Saving FCM token to Supabase for user ${userId}`);
     const { error } = await supabase
       .from('device_tokens')
       .upsert(
